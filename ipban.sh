@@ -2,10 +2,10 @@
 export LC_ALL="en_US.UTF-8";
 LOG_PATH=/var/log/nginx/*access.log
 IGNORE_LIST=/etc/ipbans/ignore_ip.list
-time=$1
 state_file=/etc/ipbans/state.log
 diff_date=86400 #set unban time
-limit=150 #set reqests limit
+time=$1
+limit=$2 #set reqests limit
 ###########################################
 unban(){
 		IFS=$'\n'
@@ -56,7 +56,13 @@ check_dir(){
 #startup checks, time and dirs
 	if [ $# -eq 0 ]
 then
-   echo -e "set search time in minutes. \n Usage: $0 minutes"
+   echo -e "set search time in minutes. \n Usage: $0 <minutes> <limit>"
+   exit 1
+fi
+
+	if [ $2 -eq 0 ]
+then
+   echo -e "set limits. \n Usage: $0 <minutes> <limit>"
    exit 1
 fi
 
@@ -73,6 +79,6 @@ count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
 		checkip
 	else
 		#echo "0"
-		echo "no ip banned at `date`" >> $state_file
+		echo -e "no ip banned at `date` | time was $time | limit was $limit" >> $state_file
 		unban
 	fi
