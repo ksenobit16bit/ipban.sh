@@ -27,12 +27,12 @@ unban(){
 			done
 }
 
-checkip(){
+banip(){
 	if [[ $(iptables-save | grep -c $ip) -eq 1 ]]
 		then echo "alredy banned" >> $state_file
 	else
 		iptables -I INPUT -s $ip -m comment --comment "added=`date`" -j DROP
-		echo "ip '$ip' banned at `date`" >> $state_file
+		echo "ip '$ip' banned at `date` | time was $time | limit was $limit" >> $state_file
 		unban
 	fi
 }
@@ -71,7 +71,8 @@ count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
 	then
 		#echo "1"
 		ip=$(cat /etc/ipbans/reqests-count.log | awk '{print $2}')
-		checkip
+		banip
+		unban
 	else
 		#echo "0"
 		echo -e "no ip banned at `date` | time was $time | limit was $limit" >> $state_file
