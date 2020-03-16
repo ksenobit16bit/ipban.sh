@@ -54,17 +54,12 @@ check_dir(){
 
 ###########################################
 #startup checks, time and dirs
-	if [ $# -eq 0 ]
+	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
 then
-   echo -e "set search time in minutes. \n Usage: $0 <minutes> <limit>"
+   echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
    exit 1
 fi
 
-	if [ $2 -eq 0 ]
-then
-   echo -e "set limits. \n Usage: $0 <minutes> <limit>"
-   exit 1
-fi
 
 check_dir
 
