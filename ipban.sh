@@ -5,6 +5,7 @@ IGNORE_LIST=/etc/ipbans/ignore_ip.list
 time=$1
 state_file=/etc/ipbans/state.log
 diff_date=86400 #set unban time
+limit=150 #set reqests limit
 ###########################################
 unban(){
 		IFS=$'\n'
@@ -65,7 +66,7 @@ check_dir
 reqests=$(awk -vDate=`date -d'now-'$time' minute' +[%d/%b/%Y:%H:%M:%S` -vDate2=`date +[%d/%b/%Y:%H:%M:%S` '$4 > Date && $4 < Date2 {print $1}' $LOG_PATH | sort | uniq -c | grep -v -f $IGNORE_LIST | sort -nr | head -n 1)
 echo $reqests > /etc/ipbans/reqests-count.log
 count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
-	if [[ $count -gt 150 ]] 
+	if [[ $count -gt $limit ]] 
 	then
 		#echo "1"
 		ip=$(cat /etc/ipbans/reqests-count.log | awk '{print $2}')
