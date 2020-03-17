@@ -70,3 +70,4 @@ count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
 		echo -e "no ip banned at `date` | time was $time | limit was $limit" >> $state_file
 		unban
 	fi
+#test
