@@ -38,13 +38,13 @@ banip(){
 check_dir(){
 	if ! [ -d /etc/ipbans/ ] 
 	then
-		echo "please, create dir /etc/ipbans/ "
-		exit 1
+		echo -e "creating dir /etc/ipbans/... \nplease, create /etc/ipbans/ignore_ip.list and add ip's to ignore"
+		mkdir /etc/ipbans/
 	fi
 
 	if ! [ -f /etc/ipbans/ignore_ip.list ]
 	then 
-		echo "please, create file /etc/ipbans/ignore_ip.list and add ip's to ignore!"
+		echo "create file /etc/ipbans/ignore_ip.list and add ip's to ignore"
 		exit 1
 	fi
 }
