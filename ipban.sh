@@ -5,13 +5,11 @@ IGNORE_LIST=/etc/ipbans/ignore_ip.list
 state_file=/etc/ipbans/state.log
 diff_date=86400 #set unban time
 time=$1
-limit=$2 #set reqests limit
+limit=$2
 ###########################################
 unban(){
 		IFS=$'\n'
 	export PATH="/sbin:/usr/sbin:/bin/:/usr/bin"
-	#diff_date=86400 #set unban time
-
 	cur_date=`date '+%s'`
 	sub=$((${cur_date}-${diff_date}))
 
@@ -50,8 +48,6 @@ check_dir(){
 		exit 1
 	fi
 }
-
-
 ###########################################
 #startup checks, time and dirs
 	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
@@ -59,8 +55,6 @@ then
    echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
    exit 1
 fi
-
-
 check_dir
 
 #let's find bad ip's!
@@ -69,12 +63,10 @@ echo $reqests > /etc/ipbans/reqests-count.log
 count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
 	if [[ $count -gt $limit ]] 
 	then
-		#echo "1"
 		ip=$(cat /etc/ipbans/reqests-count.log | awk '{print $2}')
 		banip
 		unban
 	else
-		#echo "0"
 		echo -e "no ip banned at `date` | time was $time | limit was $limit" >> $state_file
 		unban
 	fi
