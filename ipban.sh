@@ -10,11 +10,9 @@ time=$1
 limit=$2
 ###########################################
 unban(){
-		IFS=$'\n'
-	export PATH="/sbin:/usr/sbin:/bin/:/usr/bin"
+	IFS=$'\n'
 	cur_date=`date '+%s'`
 	sub=$((${cur_date}-${diff_date}))
-
 	iptables-save | grep added |while read -r line
 		do
 		 save_date=`echo $line | sed 's/^.*"added=\([^"]*\).*$/\1/'`
@@ -33,7 +31,6 @@ banip(){
 	else
 		iptables -I INPUT -s $ip -m comment --comment "added=`date`" -j DROP
 		echo "ip '$ip' banned at `date` | time was $time | limit was $limit" >> $state_file
-		unban
 	fi
 }
 
@@ -52,11 +49,12 @@ check_dir(){
 }
 ###########################################
 #startup checks, time and dirs
-	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
+	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ] 
 then
-   echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
+   echo -e "Set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
    exit 1
 fi
+
 check_dir
 
 #let's find bad ip's!
@@ -72,4 +70,3 @@ count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
 		echo -e "no ip banned at `date` | time was $time | limit was $limit" >> $state_file
 		unban
 	fi
-#test
