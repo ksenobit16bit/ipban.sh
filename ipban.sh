@@ -46,13 +46,11 @@ startup_check(){
 		echo "create file /etc/ipbans/ignore_ip.list and add ip's to ignore"
 		exit 1
 	fi
-
-
 }
 ###########################################
 #startup checks, time and dirs
 startup_check
-
+#help section
 	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
 	then
   		echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
