@@ -10,8 +10,7 @@ time=$1
 limit=$2
 ###########################################
 unban(){
-		IFS=$'\n'
-	export PATH="/sbin:/usr/sbin:/bin/:/usr/bin"
+	IFS=$'\n'
 	cur_date=`date '+%s'`
 	sub=$((${cur_date}-${diff_date}))
 
@@ -33,11 +32,10 @@ banip(){
 	else
 		iptables -I INPUT -s $ip -m comment --comment "added=`date`" -j DROP
 		echo "ip '$ip' banned at `date` | time was $time | limit was $limit" >> $state_file
-		unban
 	fi
 }
 
-check_dir(){
+startup_check(){
 	if ! [ -d /etc/ipbans/ ] 
 	then
 		echo -e "creating dir /etc/ipbans/... \nplease, create /etc/ipbans/ignore_ip.list and add ip's to ignore"
@@ -49,15 +47,16 @@ check_dir(){
 		echo "create file /etc/ipbans/ignore_ip.list and add ip's to ignore"
 		exit 1
 	fi
+
+	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
+	then
+  		echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
+   		exit 1
+	fi
 }
 ###########################################
 #startup checks, time and dirs
-	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
-then
-   echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
-   exit 1
-fi
-check_dir
+startup_check
 
 #let's find bad ip's!
 reqests=$(awk -vDate=`date -d'now-'$time' minute' +[%d/%b/%Y:%H:%M:%S` -vDate2=`date +[%d/%b/%Y:%H:%M:%S` '$4 > Date && $4 < Date2 {print $1}' $LOG_PATH | sort | uniq -c | grep -v -f $IGNORE_LIST | sort -nr | head -n 1)
@@ -72,4 +71,3 @@ count=$(cat /etc/ipbans/reqests-count.log | awk '{print $1}')
 		echo -e "no ip banned at `date` | time was $time | limit was $limit" >> $state_file
 		unban
 	fi
-#test
