@@ -47,16 +47,17 @@ startup_check(){
 		exit 1
 	fi
 
-	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
-	then
-  		echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
-   		exit 1
-	fi
+
 }
 ###########################################
 #startup checks, time and dirs
 startup_check
 
+	if [[ $1 -eq 0 ]] || [[ $2 -eq 0 ]] || [ $# -eq 0 ]
+	then
+  		echo -e "set search time in minutes and set limits. \n Usage: $0 <minutes> <limit>"
+   		exit 1
+	fi
 
 #let's find bad ip's!
 reqests=$(awk -vDate=`date -d'now-'$time' minute' +[%d/%b/%Y:%H:%M:%S` -vDate2=`date +[%d/%b/%Y:%H:%M:%S` '$4 > Date && $4 < Date2 {print $1}' $LOG_PATH | sort | uniq -c | grep -v -f $IGNORE_LIST | sort -nr | head -n 1)
