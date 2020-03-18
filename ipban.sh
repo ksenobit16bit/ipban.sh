@@ -1,5 +1,7 @@
 #!/bin/bash
 export LC_ALL="en_US.UTF-8";
+export PATH="/sbin:/usr/sbin:/bin/:/usr/bin"
+
 LOG_PATH=/var/log/nginx/*access.log
 IGNORE_LIST=/etc/ipbans/ignore_ip.list
 state_file=/etc/ipbans/state.log
