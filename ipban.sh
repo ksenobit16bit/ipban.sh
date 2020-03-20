@@ -37,7 +37,7 @@ banip(){
 startup_check(){
 	if ! [ -d /etc/ipbans/ ] 
 	then
-		echo -e "creating dir /etc/ipbans/... \nplease, create /etc/ipbans/ignore_ip.list and add ip's to ignore"
+		echo -e "creating dir /etc/ipbans/... \nplease, create /etc/ipbans/ignore_ip.list and add ip's to ignore in ignore_ip.list"
 		mkdir /etc/ipbans/
 	fi
 
