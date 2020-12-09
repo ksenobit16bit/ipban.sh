@@ -61,6 +61,7 @@ startup_check
 	if [[ $3 -eq 1 ]]
 	then
 		reqests=$(awk -vDate=`date -d'now-'$time' minute' +[%d/%b/%Y:%H:%M:%S` -vDate2=`date +[%d/%b/%Y:%H:%M:%S` '$4 > Date && $4 < Date2 {print $1}' $LOG_PATH | sort | uniq -c | grep -v -f $IGNORE_LIST | sort -nr | head -n 1)
+		echo "you start in dry_run mode:"
 		echo "reqests = $reqests"
 		echo "limit = $limit"
 		exit 0
